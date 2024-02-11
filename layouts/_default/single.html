@@ -70,6 +70,26 @@
         ></div>
         <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
 
+        <script>
+          const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+              if (mutation.addedNodes.length == 0) return;
+              const iframe = mutation.addedNodes[0];
+              if (iframe.tagName !== 'IFRAME') return;
+
+              // now edit the src doc to add a style rule inside the <style> tag
+              const additionalStyles = `
+                .dark {
+                  background: black;
+                }
+              `;
+              
+              iframe.srcdoc = iframe.srcdoc.replace('</style>', additionalStyles + '</style>');
+            });
+          });
+          observer.observe(document.getElementById("cusdis_thread"), { childList: true, subtree: true });
+        </script>
+
       {{ end }}
       
       {{ if .Site.DisqusShortname }}
