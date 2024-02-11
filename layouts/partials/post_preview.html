@@ -1,8 +1,8 @@
-<article class="post-preview">
+<article class="posts-preview">
     <a href="{{ .Permalink }}">
-        <h2 class="post-title">{{ .Title }}</h2>
+        <h2 class="posts-title">{{ .Title }}</h2>
         {{ if .Params.subtitle }}
-        <h3 class="post-subtitle">
+        <h3 class="posts-subtitle">
             {{ .Params.subtitle }}
         </h3>
         {{ end }}
@@ -16,13 +16,13 @@
         {{ end }}
     </a>
 
-    <p class="post-meta">
+    <p class="posts-meta">
         {{ partial "post_meta.html" . }}
     </p>
-    <div class="post-entry">
+    <div class="posts-entry">
         {{ if or (.Truncated) (.Params.summary) }}
         {{ .Summary }}
-        <a href="{{ .Permalink }}" class="post-read-more">[{{ i18n "readMore" }}]</a>
+        <a href="{{ .Permalink }}" class="posts-read-more">[{{ i18n "readMore" }}]</a>
         {{ else }}
         {{ .Content }}
         {{ end }}
