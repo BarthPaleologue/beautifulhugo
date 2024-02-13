@@ -30,14 +30,16 @@
             {{- end -}}
           {{ end }}
           {{ if .Site.Params.rss }}
+          {{ with .OutputFormats.Get "RSS" }}
           <li>
-            <a href="{{ with .OutputFormats.Get "RSS" }}{{ .RelPermalink }}{{ end }}" title="RSS">
+            <a href="{{ .RelPermalink }}" title="RSS">
               <span class="fa-stack fa-lg">
                 <i class="fas fa-circle fa-stack-2x"></i>
                 <i class="fas fa-rss fa-stack-1x fa-inverse"></i>
               </span>
             </a>
           </li>
+          {{ end }}
           {{ end }}
         </ul>
         <p class="credits copyright text-muted">
@@ -91,7 +93,24 @@
 <script src="{{ "js/highlight.min.js" | absURL }}"></script>
 <script> hljs.initHighlightingOnLoad(); </script>
 <script> $(document).ready(function() {$("pre.chroma").css("padding","0");}); </script>
-{{- end -}}
+{{- end  }}
+<script>
+  renderMathInElement(
+    document.body,
+    {
+      delimiters: [
+        {left: "$$", right: "$$", display: true},
+        {left: "$", right: "$", display: false},
+        {left: "\\begin{equation}", right: "\\end{equation}", display: true},
+        {left: "\\begin{align}", right: "\\end{align}", display: true},
+        {left: "\\begin{alignat}", right: "\\end{alignat}", display: true},
+        {left: "\\begin{gather}", right: "\\end{gather}", display: true},
+        {left: "\\(", right: "\\)", display: false},
+        {left: "\\[", right: "\\]", display: true}
+      ]
+    }
+  );
+</script>
 
 {{- if .Site.Params.selfHosted -}}
 <script src="{{ "js/photoswipe.min.js" | absURL }}"></script>
