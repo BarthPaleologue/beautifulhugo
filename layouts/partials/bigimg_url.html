@@ -1,0 +1,11 @@
+{{- $page := .Context.Page }}
+{{- $src := .Src }}
+{{- $url := $src }}
+{{- if not (or (hasPrefix $src "http://") (hasPrefix $src "https://")) }}
+  {{- with $page.Resources.GetMatch $src }}
+    {{- $url = .RelPermalink }}
+  {{- else }}
+    {{- $url = ($src | relURL) }}
+  {{- end }}
+{{- end }}
+{{- return $url }}
