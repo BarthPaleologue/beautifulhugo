@@ -5,6 +5,7 @@
 {{- $contentColClass := cond .Params.fullWidth "col-12" "col-md-10 offset-md-1" }}
 {{- $mainSections := default (slice "post" "posts") site.Params.mainSections }}
 {{- $isMainContent := in $mainSections .Type }}
+{{- $headingClass := cond $isMainContent "post-heading" (printf "%s-heading" .Type) }}
 {{ if .IsHome }}
   {{- $title = .Site.Params.homeTitle | default .Site.Title }}
   {{- $subtitle = .Site.Params.subtitle }}
@@ -38,7 +39,7 @@
         <div class="container">
           <div class="row">
             <div class="{{$contentColClass}}">
-              <div class="{{ .Type }}-heading">
+              <div class="{{ $headingClass }}">
                 <h1>{{ with $title }}{{.}}{{ else }}<br/>{{ end }}</h1>
                 {{ if not $isMainContent }}
                   <hr class="small">
@@ -59,7 +60,7 @@
       <div class="container">
         <div class="row">
           <div class="{{$contentColClass}}">
-            <div class="{{ .Type }}-heading">
+            <div class="{{ $headingClass }}">
               {{ if $bigimg }}
               <span class="h1">{{ with $title }}{{.}}{{ else }}<br/>{{ end }}</span>
               {{ else }}

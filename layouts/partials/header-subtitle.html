@@ -1,9 +1,11 @@
 {{- $subtitle := .Subtitle }}
 {{- $ctx := .Context }}
+{{- $mainSections := default (slice "post" "posts") site.Params.mainSections }}
+{{- $subheadingClass := cond (in $mainSections $ctx.Type) "post-subheading" (printf "%s-subheading" $ctx.Type) }}
 {{ if $subtitle }}
   {{ if eq $ctx.Type "page" }}
-    <span class="{{ $ctx.Type }}-subheading">{{ $subtitle }}</span>
+    <span class="{{ $subheadingClass }}">{{ $subtitle }}</span>
   {{ else }}
-    <h2 class="{{ $ctx.Type }}-subheading">{{ $subtitle }}</h2>
+    <h2 class="{{ $subheadingClass }}">{{ $subtitle }}</h2>
   {{ end }}
 {{ end }}
