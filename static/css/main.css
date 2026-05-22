@@ -1068,7 +1068,8 @@ footer div.disclaimer {
   max-width: 100%;
 }
 
-.blog-post a {
+.blog-post a,
+.post-preview .post-entry a {
   overflow-wrap: anywhere;
   word-break: break-word;
 }
