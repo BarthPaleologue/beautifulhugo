@@ -17,7 +17,7 @@
             {{ range .Params.categories }}
               {{- $catName := . -}}
               {{- with $.Site.GetPage (printf "/%s/%s" "categories" ($catName | urlize)) -}}
-              <a href="{{ .RelPermalink }}">{{ $catName }}</a>&nbsp;
+              <a href="{{ .RelPermalink }}">{{ $catName }}</a>{{ " " }}
               {{- end -}}
             {{ end }}
           </div>
@@ -28,7 +28,7 @@
             {{ range .Params.tags }}
               {{- $tagName := . -}}
               {{- with $.Site.GetPage (printf "/%s/%s" "tags" ($tagName | urlize)) -}}
-              <a href="{{ .RelPermalink }}">{{ $tagName }}</a>&nbsp;
+              <a href="{{ .RelPermalink }}">{{ $tagName }}</a>{{ " " }}
               {{- end -}}
             {{ end }}
           </div>
