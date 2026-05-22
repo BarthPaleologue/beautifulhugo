@@ -114,6 +114,136 @@
         ></div>
         <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
 
+        <script>
+          (function () {
+            const cusdisThread = document.getElementById("cusdis_thread");
+            if (!cusdisThread) return;
+
+            function getResolvedTheme() {
+              return document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+            }
+
+            function resizeCusdisIframe(iframe) {
+              if (!iframe || !iframe.contentWindow) return;
+
+              const iframeDocument = iframe.contentWindow.document;
+              const iframeRoot = iframeDocument.documentElement;
+              const iframeBody = iframeDocument.body;
+              if (!iframeRoot || !iframeBody) return;
+
+              iframe.style.width = "100%";
+              iframe.style.border = "0";
+              iframe.style.overflow = "hidden";
+              iframe.setAttribute("scrolling", "no");
+
+              iframeRoot.style.overflow = "hidden";
+              iframeBody.style.overflow = "hidden";
+
+              const height = Math.max(
+                iframeRoot.scrollHeight,
+                iframeBody.scrollHeight,
+                iframeRoot.offsetHeight,
+                iframeBody.offsetHeight
+              );
+              iframe.style.height = (height + 8) + "px";
+            }
+
+            function syncCusdisTheme(iframe) {
+              if (!iframe || !iframe.contentWindow) return;
+
+              const theme = getResolvedTheme();
+              const iframeDocument = iframe.contentWindow.document;
+              const iframeRoot = iframeDocument.documentElement;
+              const iframeBody = iframeDocument.body;
+              if (!iframeRoot || !iframeBody) return;
+
+              iframeRoot.style.colorScheme = theme;
+              iframeRoot.classList.toggle("cusdis-theme-dark", theme === "dark");
+              iframeRoot.classList.toggle("cusdis-theme-light", theme === "light");
+
+              iframeBody.classList.toggle("dark", theme === "dark");
+              iframeBody.classList.toggle("light", theme === "light");
+            }
+
+            function setupCusdisIframe(iframe) {
+              if (!iframe || iframe.dataset.beautifulhugoCusdisReady) return;
+              iframe.dataset.beautifulhugoCusdisReady = "true";
+
+              const additionalStyles = `
+                html,
+                body {
+                  overflow: hidden !important;
+                }
+
+                html.cusdis-theme-dark,
+                html.cusdis-theme-dark body,
+                body.dark {
+                  background: black !important;
+                  color-scheme: dark;
+                }
+
+                html.cusdis-theme-light,
+                html.cusdis-theme-light body,
+                body.light {
+                  background: transparent !important;
+                  color-scheme: light;
+                }
+              `;
+
+              if (iframe.srcdoc && !iframe.srcdoc.includes("cusdis-theme-dark")) {
+                iframe.srcdoc = iframe.srcdoc.replace("</style>", additionalStyles + "</style>");
+              }
+
+              const updateIframe = () => {
+                syncCusdisTheme(iframe);
+                resizeCusdisIframe(iframe);
+              };
+
+              iframe.addEventListener("load", () => {
+                updateIframe();
+
+                const iframeDocument = iframe.contentWindow.document;
+                if (iframeDocument.body) {
+                  new MutationObserver(updateIframe).observe(iframeDocument.body, {
+                    childList: true,
+                    subtree: true,
+                    attributes: true,
+                  });
+                }
+
+                if ("ResizeObserver" in window) {
+                  new ResizeObserver(updateIframe).observe(iframeDocument.documentElement);
+                }
+              });
+
+              updateIframe();
+              setTimeout(updateIframe, 250);
+              setTimeout(updateIframe, 1000);
+            }
+
+            new MutationObserver((mutations) => {
+              mutations.forEach((mutation) => {
+                mutation.addedNodes.forEach((node) => {
+                  if (node.tagName === "IFRAME") {
+                    setupCusdisIframe(node);
+                  }
+                });
+              });
+            }).observe(cusdisThread, { childList: true, subtree: true });
+
+            new MutationObserver(() => {
+              const iframe = cusdisThread.querySelector("iframe");
+              if (iframe) {
+                syncCusdisTheme(iframe);
+                resizeCusdisIframe(iframe);
+              }
+            }).observe(document.documentElement, {
+              attributes: true,
+              attributeFilter: ["data-theme"],
+            });
+          })();
+        </script>
+
       {{ end }}
       
       {{ if .Site.Config.Services.Disqus.Shortname }}
