@@ -93,7 +93,7 @@
       {{ end }}
 
 
-      {{ if and (ne .Type "page") (.Param "comments") }}
+      {{ if and (.Param "comments") (or (ne .Type "page") (isset .Params "comments")) }}
       {{ if .Site.Params.giscus }}
         {{ partial "giscus-comments.html" . }}
       {{ end }}
