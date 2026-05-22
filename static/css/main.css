@@ -902,14 +902,15 @@ footer .list-inline {
 
 .footer-links {
   --bs-list-inline-padding: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--bs-list-inline-padding);
+  justify-content: center;
+  align-items: center;
 }
 
 .footer-links .list-inline-item {
-  padding-right: var(--bs-list-inline-padding);
-}
-
-.footer-links .list-inline-item:last-child {
-  padding-right: 0;
+  margin-right: 0;
 }
 
 footer .copyright {
