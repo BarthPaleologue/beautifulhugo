@@ -513,6 +513,8 @@ img::selection {
   -moz-background-size: cover;
   background-size: cover;
   -o-background-size: cover;
+  background-color: rgba(0, 0, 0, 0.4);
+  background-blend-mode: multiply;
   margin-top: 54px; /* Match Bootstrap 5 fixed navbar height */
   margin-bottom: 35px;
 }
