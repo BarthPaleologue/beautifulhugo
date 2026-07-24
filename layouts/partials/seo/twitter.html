@@ -1,13 +1,16 @@
 {{- with .Title | default .Site.Title }}
   <meta name="twitter:title" content="{{ . | truncate 70 }}" />
 {{- end }}
-{{- with .Description | default .Params.subtitle | default .Summary }}
+{{- with partial "seo/get-description.html" . }}
   <meta name="twitter:description" content="{{ . | truncate 200 }}">
 {{- end }}
-{{- with .Params.share_img | default .Params.image | default .Site.Params.logo }}
-  <meta name="twitter:image" content="{{ . | absURL }}" />
-{{- end }}
+{{- $images := partial "seo/get-page-images.html" . }}
+{{- range $images | first 1 }}
+  <meta name="twitter:image" content="{{ .Permalink }}" />
   <meta name="twitter:card" content="summary_large_image" />
+{{- else }}
+  <meta name="twitter:card" content="summary" />
+{{- end }}
 {{- with .Site.Params.author.twitter }}
   <meta name="twitter:site" content="@{{ . }}" />
   <meta name="twitter:creator" content="@{{ . }}" />

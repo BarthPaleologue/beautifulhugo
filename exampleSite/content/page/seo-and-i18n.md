@@ -40,7 +40,8 @@ No configuration is required — the structured data is generated from your exis
 
 ## Open Graph
 
-Open Graph meta tags are generated automatically via Hugo's built-in internal template:
+Open Graph meta tags follow Hugo's standard output, extended with Beautiful Hugo's
+description and image fallbacks:
 
 ```html
 <meta property="og:title" content="..." />
@@ -49,7 +50,17 @@ Open Graph meta tags are generated automatically via Hugo's built-in internal te
 <meta property="og:image" content="..." />
 ```
 
-The image is resolved from a cascade: `share_img` → `image` → `logo`.
+Images are resolved from this cascade:
+
+1. `share_img`
+2. `images`
+3. `image`
+4. A page resource matching `*feature*`, `*cover*`, or `*thumbnail*`
+5. Site-level `images`
+6. Site-level `logo`
+
+This means the same `image` used for a post preview is also used for Open Graph,
+Twitter Cards, and structured data without duplicating it in `images`.
 
 ## Twitter Cards
 
@@ -159,6 +170,8 @@ The page description (used in meta tags and structured data) follows this cascad
 1. `.Description` (explicit front matter `description` field)
 2. `.Params.subtitle` (the subtitle)
 3. `.Summary` (auto-generated from content)
+4. Site-level `description`
+5. Site-level `subtitle`
 
 ## Multilingual Support
 

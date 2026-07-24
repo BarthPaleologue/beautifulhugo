@@ -1,0 +1,6 @@
+{{- $description := .Description | default .Params.subtitle -}}
+{{- if and (not $description) .IsPage -}}
+  {{- $description = .Summary -}}
+{{- end -}}
+{{- $description = $description | default .Site.Params.description | default .Site.Params.subtitle -}}
+{{- return ($description | plainify | htmlUnescape | strings.TrimSpace) -}}

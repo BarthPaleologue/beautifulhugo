@@ -1,9 +1,4 @@
-{{- $description := "" -}}
-{{- if .Description -}}
-  {{- $description = .Description | plainify | htmlUnescape -}}
-{{- else if .IsPage -}}
-  {{- $description = .Summary | plainify | htmlUnescape -}}
-{{- end -}}
+{{- $description := partial "seo/get-description.html" . -}}
 
 {{- $keywords := slice -}}
 {{- range .Params.tags -}}
@@ -54,8 +49,9 @@
 {{- if gt .ReadingTime 5 -}}
   {{- $schema = merge $schema (dict "timeRequired" (printf "PT%dM" .ReadingTime)) -}}
 {{- end -}}
-{{- if .Site.Params.logo -}}
-  {{- $schema = merge $schema (dict "image" (.Site.Params.logo | absURL)) -}}
+{{- $images := partial "seo/get-page-images.html" . -}}
+{{- range $images | first 1 -}}
+  {{- $schema = merge $schema (dict "image" .Permalink) -}}
 {{- end -}}
 <script type="application/ld+json">
 {{ $schema | jsonify (dict "indent" "  ") | safeJS }}

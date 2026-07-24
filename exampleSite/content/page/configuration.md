@@ -285,7 +285,8 @@ These options can be set in the front matter of any page or post:
 | `author` | string/list | Per-page author(s) (string or list of strings; supports Markdown links, e.g. `"[Jane Doe](https://example.com)"`) |
 | `tags` | list | Tags for categorization |
 | `categories` | list | Categories for grouping posts |
-| `share_img` | string | Social sharing image (falls back to `image` then `logo`) |
+| `share_img` | string | Highest-priority social sharing image (see [SEO & i18n](../seo-and-i18n/#open-graph)) |
+| `images` | list | Standard Hugo social images (falls back to `image`, conventional page resources, then site images/logo) |
 | `ExpiryDate` | date | Adds `<meta name="robots" content="unavailable_after: ...">` |
 | `seo` | map | Per-page robot meta tag overrides (see [SEO & i18n](../seo-and-i18n/)) |
 | `ghRepo` | string | GitHub repo for buttons (`"user/repo"`) |

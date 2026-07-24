@@ -1,0 +1,56 @@
+{{- $images := slice -}}
+{{- $imageParams := .Params.images -}}
+{{- $resources := .Resources.ByType "image" -}}
+
+{{- if .Params.share_img -}}
+  {{- $imageParams = slice .Params.share_img -}}
+{{- else if and (not $imageParams) .Params.image -}}
+  {{- $imageParams = slice .Params.image -}}
+{{- end -}}
+
+{{/* Find a conventional page resource when no image parameter is set. */}}
+{{- if not $imageParams -}}
+  {{- $featured := $resources.GetMatch "*feature*" -}}
+  {{- if not $featured }}{{ $featured = $resources.GetMatch "{*cover*,*thumbnail*}" }}{{ end -}}
+  {{- with $featured -}}
+    {{- $images = $images | append (dict
+      "Image" .
+      "RelPermalink" .RelPermalink
+      "Permalink" .Permalink
+    ) -}}
+  {{- end -}}
+{{- end -}}
+
+{{- if and (not $imageParams) (not $images) -}}
+  {{- with .Site.Params.images -}}
+    {{- $imageParams = . -}}
+  {{- else with .Site.Params.logo -}}
+    {{- $imageParams = slice . -}}
+  {{- end -}}
+{{- end -}}
+
+{{- range $imageParams -}}
+  {{- $image := . -}}
+  {{- $url := urls.Parse $image -}}
+  {{- if eq $url.Scheme "" -}}
+    {{- with $resources.GetMatch $image -}}
+      {{- $images = $images | append (dict
+        "Image" .
+        "RelPermalink" .RelPermalink
+        "Permalink" .Permalink
+      ) -}}
+    {{- else -}}
+      {{- $images = $images | append (dict
+        "RelPermalink" ($image | relURL)
+        "Permalink" ($image | absURL)
+      ) -}}
+    {{- end -}}
+  {{- else -}}
+    {{- $images = $images | append (dict
+      "RelPermalink" $image
+      "Permalink" $image
+    ) -}}
+  {{- end -}}
+{{- end -}}
+
+{{- return $images -}}

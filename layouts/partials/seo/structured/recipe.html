@@ -1,12 +1,7 @@
 {{- $r := .Params.recipe -}}
 {{- if not $r }}{{ errorf "seo/structured/recipe.html partial called on a page with no .Params.recipe: %s" (or .File.Path .Path) }}{{ end -}}
 
-{{- $description := "" -}}
-{{- if .Description -}}
-  {{- $description = .Description | plainify | htmlUnescape -}}
-{{- else -}}
-  {{- $description = .Summary | plainify | htmlUnescape -}}
-{{- end -}}
+{{- $description := partial "seo/get-description.html" . -}}
 
 {{- $ingredients := slice -}}
 {{- range $r.ingredients -}}
@@ -84,9 +79,8 @@
   {{- $schema = merge $schema (dict "timeRequired" (printf "PT%dM" .ReadingTime)) -}}
 {{- end -}}
 
-{{- $image := "" -}}
-{{- with .Params.share_img }}{{ $image = . }}{{ else with .Params.image }}{{ $image = . }}{{ else with .Site.Params.logo }}{{ $image = . }}{{ end -}}
-{{- with $image }}{{ $schema = merge $schema (dict "image" (absURL .)) }}{{ end -}}
+{{- $images := partial "seo/get-page-images.html" . -}}
+{{- range $images | first 1 }}{{ $schema = merge $schema (dict "image" .Permalink) }}{{ end -}}
 
 <script type="application/ld+json">
 {{ $schema | jsonify (dict "indent" "  ") | safeJS }}

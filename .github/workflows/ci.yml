@@ -42,3 +42,11 @@ jobs:
           -s exampleSite
           --logLevel info
           --panicOnWarning
+
+      - name: Verify SEO fallbacks
+        run: |
+          page="exampleSite/public/post/2026-05-11-theme-features/index.html"
+          grep -Eq "<meta property=\"?og:description\"? content=\"An overview of the theme's features\">" "$page"
+          grep -Eq '<meta property="?og:image"? content="?http://localhost:1313/img/global-ike.png"?>' "$page"
+          grep -Eq '<meta name="?twitter:image"? content="?http://localhost:1313/img/global-ike.png"?>' "$page"
+          grep -Eq '"image"[[:space:]]*:[[:space:]]*"http://localhost:1313/img/global-ike.png"' "$page"
